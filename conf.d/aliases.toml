@@ -4,8 +4,12 @@
 l3 = ["log", "--limit", "3"]
 l5 = ["log", "--limit", "5"]
 lh = ["log", "-r", "@ | ancestors(remote_bookmarks().., 2) | trunk()"]
+# https://github.com/YPares/jj.conf.d
+ll = ["log", "--template", "credits_roll(0, 'none()')"]
+
 gf = ["git", "fetch"]
 gp = ["git", "push"]
+
 desynced = ["bookmark", "list", "--tracked", "--template", "bookmark_desynced"]
 ahead = ["bookmark", "list", "--tracked", "--template", "bookmark_ahead"] # remote is ahead
 behind = ["bookmark", "list", "--tracked", "--template", "bookmark_behind"] # remote is behind
