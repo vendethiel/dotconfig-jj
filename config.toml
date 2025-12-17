@@ -1,0 +1,46 @@
+#:schema https://docs.jj-vcs.dev/latest/config-schema.json
+
+[colors]
+remote_bookmarks = "yellow" # probably doesn't appear very often
+
+[template-aliases]
+"remote_tracked_bookmark(self)" = '''
+concat(
+  separate(" ",
+    label("bookmark", "@" ++ remote),
+    if(present, format_tracked_remote_ref_distances(self)),
+  ),
+  if(present, format_ref_targets(self), " (not created yet)"),
+)
+'''
+"bookmark_desynced" = '''
+if(remote
+    && tracked
+    && (!self.tracking_ahead_count().zero() || !self.tracking_behind_count().zero()),
+  remote_tracked_bookmark(self)
+)
+'''
+"bookmark_ahead" = '''
+if(remote
+    && tracked
+    && !self.tracking_ahead_count().zero(),
+  remote_tracked_bookmark(self)
+)
+'''
+"bookmark_behind" = '''
+if(remote
+    && tracked
+    && !self.tracking_behind_count().zero(),
+  remote_tracked_bookmark(self)
+)
+'''
+
+[aliases]
+l3 = ["log", "--limit", "3"]
+l5 = ["log", "--limit", "5"]
+lh = ["log", "-r", "@ | ancestors(remote_bookmarks().., 2) | trunk()"]
+gf = ["git", "fetch"]
+gp = ["git", "push"]
+desynced = ["bookmark", "list", "--tracked", "--template", "bookmark_desynced"]
+ahead = ["bookmark", "list", "--tracked", "--template", "bookmark_ahead"] # remote is ahead
+behind = ["bookmark", "list", "--tracked", "--template", "bookmark_behind"] # remote is behind
