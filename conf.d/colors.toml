@@ -1,0 +1,5 @@
+#:schema https://docs.jj-vcs.dev/latest/config-schema.json
+
+[colors]
+remote_bookmarks = "yellow" # probably doesn't appear very often
+
