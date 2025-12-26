@@ -1,7 +1,18 @@
+#:schema https://docs.jj-vcs.dev/latest/config-schema.json
+
 [revset-aliases]
 'stack()' = 'stack(@)'
 'stack(x)' = 'stack(x, 2)'
 'stack(x, n)' = 'ancestors(reachable(x, mutable()), n)'
 
-'closest_bookmark(to)' = 'heads(::to & (bookmarks() ~ trunk()))'
+'closest_bookmark(to)' = 'heads(::to & bookmarks())'
 'closest_pushable(to)' = 'heads(::to & ~description(exact:"") & (~empty() | merges()))'
+
+'local()' = 'mine() ~ ::remote_bookmarks()'
+
+# ! https://www.lysator.liu.se/~axl/jj-aliases/
+
+# (for `collapse`)
+"branch_start(to)" = "heads(::to & trunk())+ & ::to"
+
+tip = "exactly(heads(@-::~@), 1)"

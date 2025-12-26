@@ -11,15 +11,25 @@ gf = ["git", "fetch"]
 gp = ["git", "push"]
 
 # https://github.com/jj-vcs/jj/discussions/5568#discussioncomment-12674748
-tug = ["bookmark", "move", "--from", "closest_bookmark(@)", "--to", "closest_pushable(@)"]
+# tugs = tug safe (exclude trunk), tugt = tug including trunk
+tugs = ["bookmark", "move", "--from", "closest_bookmark(@) ~ trunk()", "--to", "closest_pushable(@)"]
+tugt = ["bookmark", "move", "--from", "closest_bookmark(@)", "--to", "closest_pushable(@)"]
 restack = ["rebase", "-o", "trunk()", "-s", "roots(trunk()..) & stack()"]
 
 desynced = ["bookmark", "list", "--tracked", "--template", "bookmark_desynced"]
 ahead = ["bookmark", "list", "--tracked", "--template", "bookmark_ahead"] # remote is ahead
 behind = ["bookmark", "list", "--tracked", "--template", "bookmark_behind"] # remote is behind
 
-# jj squash  # from @ to @-
-# jj squash -r x  # from x to x-
-# jj squash -t x  # from @ to x
-# jj squash -f x  # from x to @
-# jj squash -f x -t y  # from x to y
+# ! Aliases from https://www.lysator.liu.se/~axl/jj-aliases/
+
+# Create empty commit with description at the branch tip (XXX use `tip`? remove and use `jj new tip`?)
+plan = ["new", "--no-edit", "heads(@::)", "-m"]
+
+# Collapse the current branch into one commit
+collapse = ["squash", "-f", "branch_start(@)+::@", "-t", "branch_start(@)"]
+
+# Show detailed log
+long = ["log", "-T", "builtin_log_detailed"]
+
+# My branches (heads) that are not yet merged to trunk()
+open = ["log", "-r", "heads(mine()) ~ ::trunk()"]
