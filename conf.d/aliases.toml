@@ -10,7 +10,16 @@ ll = ["log", "--template", "credits_roll(0, 'none()')"]
 gf = ["git", "fetch"]
 gp = ["git", "push"]
 
+# https://github.com/jj-vcs/jj/discussions/5568#discussioncomment-12674748
+tug = ["bookmark", "move", "--from", "closest_bookmark(@)", "--to", "closest_pushable(@)"]
+restack = ["rebase", "-o", "trunk()", "-s", "roots(trunk()..) & stack()"]
+
 desynced = ["bookmark", "list", "--tracked", "--template", "bookmark_desynced"]
 ahead = ["bookmark", "list", "--tracked", "--template", "bookmark_ahead"] # remote is ahead
 behind = ["bookmark", "list", "--tracked", "--template", "bookmark_behind"] # remote is behind
 
+# jj squash  # from @ to @-
+# jj squash -r x  # from x to x-
+# jj squash -t x  # from @ to x
+# jj squash -f x  # from x to @
+# jj squash -f x -t y  # from x to y
